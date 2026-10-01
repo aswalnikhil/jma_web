@@ -37,7 +37,15 @@ export function Shop() {
     if (n === index) return;
     setState([n, n > index ? 1 : -1]);
     const tab = railRef.current?.querySelectorAll<HTMLButtonElement>('[role="tab"]')[n];
-    tab?.scrollIntoView({ block: "nearest", inline: "center", behavior: reduce ? "auto" : "smooth" });
+    // Centre the active thumbnail by scrolling only the rail. (scrollIntoView would also
+    // scroll the clipped section and page sideways, exposing a white strip.)
+    const rail = railRef.current;
+    if (rail && tab) {
+      rail.scrollTo({
+        left: tab.offsetLeft - rail.offsetLeft - (rail.clientWidth - tab.offsetWidth) / 2,
+        behavior: reduce ? "auto" : "smooth",
+      });
+    }
     if (focusTab) tab?.focus({ preventScroll: true });
   };
 
@@ -53,7 +61,7 @@ export function Shop() {
     <section
       id="teas"
       aria-labelledby="teas-title"
-      className="defer-render relative isolate touch-pan-y touch-pinch-zoom overflow-hidden text-white"
+      className="defer-render relative isolate touch-pan-y touch-pinch-zoom overflow-clip text-white"
       onPointerDown={(e) => {
         if (e.pointerType !== "mouse") swipeStart.current = e.clientX;
       }}
