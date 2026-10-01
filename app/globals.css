@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Design tokens — see design-system/jma-herbals/MASTER.md */
+@theme {
+  --color-background: #fbf8f1;
+  --color-surface: #ffffff;
+  --color-foreground: #1a2a1e;
+  --color-muted: #f2ede1;
+  --color-muted-foreground: #56645a;
+  --color-border: #e4ddcb;
+  --color-primary: #1f5a2e;
+  --color-primary-hover: #17461f;
+  --color-on-primary: #ffffff;
+  --color-accent: #d9a21b;
+  --color-on-accent: #1c1705;
+  --color-ring: #1f5a2e;
+
+  --color-tea-rose: #b8394a;
+  --color-tea-lavender: #6a5aa6;
+  --color-tea-bluepea: #463c8e;
+  --color-tea-hibiscus: #7a1f2b;
+  --color-tea-lemon: #c9a400;
+  --color-tea-nettle: #2e6b3a;
+  --color-tea-ginger: #9c7443;
+  --color-tea-raspberry: #c0612b;
+
+  --font-sans: var(--font-raleway), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-lora), ui-serif, Georgia, serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  body {
+    background: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    text-wrap: balance;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Below-the-fold sections skip layout/paint until they near the viewport,
+   which keeps the first render (navbar + hero) cheap. The size hint reserves
+   space so the scrollbar and anchor jumps stay stable. */
+@utility defer-render {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
